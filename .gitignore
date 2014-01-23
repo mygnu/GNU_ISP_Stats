@@ -16,3 +16,13 @@
 *.exe
 *.out
 *.app
+
+#temporary files
+src/tmp/*
+src/null
+
+#gtag files
+G????
+G?????
+
+*.pdf
