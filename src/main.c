@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 20:16:55 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Fri Jan 24 09:13:18 2014 (+1030)
+ * Last-Updated: Fri Jan 24 10:25:27 2014 (+1030)
  *           By: mygnu
- *     Update #: 46
+ *     Update #: 63
  * URL:
  * Doc URL:
  * Keywords:
@@ -46,10 +46,22 @@
 
 /* Code: */
 #include <stdio.h>
+#include <string.h>
 #include "credentials.h"
 #include "internodeAPI.h"
 #include "xmlparsing.h"
+#define BASEXML "tmp/nodeservice.xml"
+#define USAGEXML "tmp/nodeusage.xml"
+#define HISTORYXML "tmp/nodehistory.xml"
 
+
+char * makeUrl(char * base, char * postfix)
+{
+   static char newurl[80];
+    strcpy(newurl, base);
+    strcat(newurl, postfix);
+    return newurl;
+}
 int
 main(int argc, char *argv[])
 {
@@ -60,11 +72,30 @@ main(int argc, char *argv[])
     printf("%s %s\n", uname, secret );
 
 
-char * baseurl = "https://customer-webtools-api.internode.on.net/api/v1.5/";
-char * xmlfile = "tmp/nodeservice.xml";
+char baseurl[80] = "https://customer-webtools-api.internode.on.net/api/v1.5/";
 /* get the first xml for the internode userid */
 
-getNodeXml(baseurl, xmlfile);
+getNodeXml(baseurl, BASEXML);
+char * serviceID = getElementContent(BASEXML, "//service");
+printf("%s\n", serviceID );
+strcat(baseurl, serviceID);
+
+char history[80];
+strcpy(history, baseurl);
+strcat(history,"/history/");
+
+char usage[80];
+strcpy(usage, baseurl);
+strcat(usage,"/usage/");
+
+printf("%s\n",baseurl );
+printf("%s\n",history );
+printf("%s\n",usage );
+
+getNodeXml(usage, USAGEXML);
+getNodeXml(history, HISTORYXML);
+
+
     return 0;
 }
 
