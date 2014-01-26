@@ -7,9 +7,9 @@
  * Created: Tue Jan 21 22:44:20 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Thu Jan 23 23:01:22 2014 (+1030)
+ * Last-Updated: Sun Jan 26 14:51:44 2014 (+1030)
  *           By: mygnu
- *     Update #: 15
+ *     Update #: 16
  * URL:
  * Doc URL:
  * Keywords:
@@ -49,6 +49,7 @@
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 #include <stdio.h>
+#include <string.h>
 
 
 static xmlDocPtr
@@ -60,9 +61,11 @@ getnodeset (xmlDocPtr doc, xmlChar *xpath);
 
 /* takes two pointers to string as name of the document and element */
 char *
-getElementContent(char * docname, char * element)
+getElementContent(char * docname, char * elementname)
 {
-
+    char  element[50] = "//"; 	/* needs // prefix for some reason */
+    strcat(element, elementname);
+    
     xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
     xmlChar *xpath = (xmlChar*) element; /* is the name of the element */
 
