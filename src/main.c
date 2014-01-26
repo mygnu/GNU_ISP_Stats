@@ -33,36 +33,44 @@ int
 main(int argc, char *argv[])
 {
 
-    char baseurl[80] = "https://customer-webtools-api.internode.on.net/api/v1.5/";
-/* get the first xml for the internode userid */
+    char baseurl[80] = "https://customer-webtools-api.internode.on.net\
+/api/v1.5/";
 
-    getNodeXml(baseurl, BASEXML); // this function takes url and saves the xml file to the path given using libcurl defined in internodeAPI.h 
+/* get the first xml for the internode use rid */
+    getNodeXml(baseurl, BASEXML); // comment out if not compiling with internodeAPI.h
+
     char * serviceID = getElementContent(BASEXML, "service");
     printf("%s\n", serviceID ); // i get ID_changed printed
     strcat(baseurl, serviceID);
+    printf("%s\n",baseurl );    /* all of these work */
 
     char history[80];
     strcpy(history, baseurl);
     strcat(history,"/history/");
+    printf("%s\n",history );
 
     char usage[80];
     strcpy(usage, baseurl);
     strcat(usage,"/usage/");
-
-    printf("%s\n",baseurl );    /* all of these work */
-    printf("%s\n",history );
     printf("%s\n",usage );
 
-    getNodeXml(usage, USAGEXML); /* download the files from Iternode */
-    getNodeXml(history, HISTORYXML);
+    getNodeXml(usage, USAGEXML);     /* internodeAPI.h */
+    getNodeXml(history, HISTORYXML); /* internodeAPI.h */
 
     char * traffic = getElementContent(HISTORYXML, "traffic");
 
-    printf("%s\n", traffic);	/* segmentation fault */
+    printf("%s\n", traffic);    /* segmentation fault */
 
-    free(traffic);
     return 0;
 }
 
 
 /* main.c ends here */
+
+
+
+
+
+
+
+

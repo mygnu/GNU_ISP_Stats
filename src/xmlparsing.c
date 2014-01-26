@@ -7,9 +7,9 @@
  * Created: Tue Jan 21 22:44:20 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Sun Jan 26 14:51:44 2014 (+1030)
+ * Last-Updated: Sun Jan 26 15:19:14 2014 (+1030)
  *           By: mygnu
- *     Update #: 16
+ *     Update #: 17
  * URL:
  * Doc URL:
  * Keywords:
@@ -72,7 +72,7 @@ getElementContent(char * docname, char * elementname)
     xmlXPathObjectPtr result = getnodeset (doc, xpath);
     xmlNodeSetPtr nodeset;
     int i;
-    xmlChar *keyword;
+    xmlChar *keyword; 		/* could possibly use malloc() */
 
     if (result)                 /* if not NULL */
     {
