@@ -1,5 +1,6 @@
 /* Code: */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "internodeAPI.h"
 #include "xmlparsing.h"
@@ -8,7 +9,8 @@
 /* <internode> */
 /* <api> */
 /* <services count="1"> */
-/*      <service type="Personal_ADSL" href="/api/v1.5/ID">ID_changed</service> */
+/*      <service type="Personal_ADSL" href="/api/v1.5/ID">ID_changed */
+/*      </service> */
 /*      </services> */
 /* </api> */
 /* </internode> */
@@ -37,35 +39,49 @@ main(int argc, char *argv[])
 /api/v1.5/";
 
 /* get the first xml for the internode use rid */
-    getNodeXml(baseurl, BASEXML); // comment out if not compiling with internodeAPI.h
+    //    getNodeXml(baseurl, BASEXML);/* comment out if not compiling with
+    //                                    internodeAPI.h */
 
     char * serviceID = getElementContent(BASEXML, "service");
-    printf("%s\n", serviceID ); // i get ID_changed printed
+    printf("%s\n", serviceID ); /* i get ID_changed printed */
     strcat(baseurl, serviceID);
     printf("%s\n",baseurl );    /* all of these work */
 
-    char history[80];
+    char *history = malloc(sizeof(char) * 128);
     strcpy(history, baseurl);
     strcat(history,"/history/");
     printf("%s\n",history );
 
-    char usage[80];
+    char *usage = malloc(sizeof(char) * 128);
     strcpy(usage, baseurl);
     strcat(usage,"/usage/");
     printf("%s\n",usage );
 
-    getNodeXml(usage, USAGEXML);     /* internodeAPI.h */
-    getNodeXml(history, HISTORYXML); /* internodeAPI.h */
+    //    getNodeXml(usage, USAGEXML);     /* internodeAPI.h */
+    //    getNodeXml(history, HISTORYXML); /* internodeAPI.h */
 
-    char * traffic = getElementContent(HISTORYXML, "traffic");
+    free(usage);
+    free(history);
 
-    printf("%s\n", traffic);    /* segmentation fault */
-
+    double totalusage = getUsage(HISTORYXML, "//traffic", 0, -30);
+    printf("totalUsage = %f MB\n", totalusage);
     return 0;
 }
 
 
 /* main.c ends here */
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

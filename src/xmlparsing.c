@@ -7,9 +7,9 @@
  * Created: Tue Jan 21 22:44:20 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Sun Jan 26 15:19:14 2014 (+1030)
+ * Last-Updated: Fri Feb  7 21:59:30 2014 (+1030)
  *           By: mygnu
- *     Update #: 17
+ *     Update #: 32
  * URL:
  * Doc URL:
  * Keywords:
@@ -50,7 +50,7 @@
 #include <libxml/xpath.h>
 #include <stdio.h>
 #include <string.h>
-
+#define MBITS 1000000
 
 static xmlDocPtr
 getdoc (char *docname);
@@ -63,16 +63,16 @@ getnodeset (xmlDocPtr doc, xmlChar *xpath);
 char *
 getElementContent(char * docname, char * elementname)
 {
-    char  element[50] = "//"; 	/* needs // prefix for some reason */
+    char  element[50] = "//";       /* needs // prefix for some reason */
     strcat(element, elementname);
-    
+
     xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
     xmlChar *xpath = (xmlChar*) element; /* is the name of the element */
 
     xmlXPathObjectPtr result = getnodeset (doc, xpath);
     xmlNodeSetPtr nodeset;
     int i;
-    xmlChar *keyword; 		/* could possibly use malloc() */
+    xmlChar *keyword;               /* could possibly use malloc() */
 
     if (result)                 /* if not NULL */
     {
@@ -82,7 +82,7 @@ getElementContent(char * docname, char * elementname)
             keyword = xmlNodeListGetString
                 (doc, nodeset->nodeTab[i]->xmlChildrenNode, 1);
 
-            return (char *)keyword;
+            return  (char *)keyword;
             xmlFree(keyword);
         }
         xmlXPathFreeObject (result);
@@ -92,7 +92,44 @@ getElementContent(char * docname, char * elementname)
     return NULL;
 }
 
+double getUsage(char *docname, char *elementName, int startDay, int endDay)
+{
 
+//char *docname = "nodehistory.xml";
+    xmlDocPtr doc;
+    xmlChar *xpath = (xmlChar*) elementName;
+    xmlNodeSetPtr nodeset;
+    xmlXPathObjectPtr result;       /* ptr to xmlPathObject structure
+                                       containing XmlNodeSetPtr to nodesetval*/
+    xmlChar *element_content;
+
+    doc = getdoc(docname);
+    result = getnodeset (doc, xpath); /* xmlXpathObPtr in the given document */
+    double total = 0;
+    startDay = startDay + 365;
+    endDay = endDay + 365;
+    if (result) /* if not NULL */
+    {
+        nodeset = result->nodesetval;
+        for (int i=0; i < nodeset->nodeNr; i++)
+        {
+
+            element_content = xmlNodeListGetString
+                (doc, nodeset->nodeTab[i]->xmlChildrenNode, 1);
+
+	    if(i<=startDay && i>=endDay)
+		{
+		    printf("usage of the day %d element: %s\n", i, element_content);
+		    total = total + (atof((char *)element_content) / MBITS);
+		}
+            xmlFree(element_content);
+        }
+        xmlXPathFreeObject (result);
+    }
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+    return total;
+}
 
 /* takes pointer to a string of the name of the document */
 static xmlDocPtr
@@ -111,7 +148,7 @@ getdoc (char *docname)
 
 
 /* takes a xmlDocPtr to the xml document and a xmlChar string pointer as
- an element name */
+   an element name */
 static xmlXPathObjectPtr
 getnodeset (xmlDocPtr doc, xmlChar *xpath)
 {
@@ -145,11 +182,3 @@ getnodeset (xmlDocPtr doc, xmlChar *xpath)
 
 
 /* xmlparsing.c ends here */
-
-
-
-
-
-
-
-
