@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 19:57:52 2014 (+1030)
  * Version: 0.001
  * Package-Requires: ()
- * Last-Updated: Thu Jan 23 23:44:39 2014 (+1030)
+ * Last-Updated: Sat Feb  8 15:20:56 2014 (+1030)
  *           By: mygnu
- *     Update #: 30
+ *     Update #: 31
  * URL:
  * Doc URL:
  * Keywords:
@@ -45,7 +45,10 @@
  */
 
 /* Code: */
+#include <stdio.h>
+#include <unistd.h>
 #include "credentials.h"
+
 
 void getCredentials( char *uname, char *secret)
 /* gets credentials from file if exists.

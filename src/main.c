@@ -5,29 +5,8 @@
 #include "internodeAPI.h"
 #include "xmlparsing.h"
 #define BASEXML "tmp/nodeservice.xml"
-/* sample XML file */
-/* <internode> */
-/* <api> */
-/* <services count="1"> */
-/*      <service type="Personal_ADSL" href="/api/v1.5/ID">ID_changed */
-/*      </service> */
-/*      </services> */
-/* </api> */
-/* </internode> */
 #define USAGEXML "tmp/nodeusage.xml"
 #define HISTORYXML "tmp/nodehistory.xml"
-/* sample XML file */
-/* <internode><api> */
-/* <service type="Personal_ADSL" request="history">ID_changed</service> */
-/*      <usagelist> */
-/*      <usage day="2013-01-25"> */
-/*      <traffic name="total" unit="bytes">2084408661</traffic> */
-/*      </usage> */
-/*      <usage day="2013-01-26"> */
-/*      <traffic name="total" unit="bytes">3038963621</traffic> */
-/*      </usage> */
-/*      </usagelist> */
-/* </api></internode> */
 
 
 
@@ -39,11 +18,12 @@ main(int argc, char *argv[])
 /api/v1.5/";
 
 /* get the first xml for the internode use rid */
-    //    getNodeXml(baseurl, BASEXML);/* comment out if not compiling with
-    //                                    internodeAPI.h */
+    getNodeXml(baseurl, BASEXML);/* comment out if not compiling with
+                                       internodeAPI.h */
 
-    char * serviceID = getElementContent(BASEXML, "service");
-    printf("%s\n", serviceID ); /* i get ID_changed printed */
+    char serviceID[40];
+    getElementContent(BASEXML, "service", serviceID);
+    printf("serveice id in %s is %s\n",BASEXML, serviceID ); /* i get ID_changed printed */
     strcat(baseurl, serviceID);
     printf("%s\n",baseurl );    /* all of these work */
 
@@ -57,13 +37,13 @@ main(int argc, char *argv[])
     strcat(usage,"/usage/");
     printf("%s\n",usage );
 
-    //    getNodeXml(usage, USAGEXML);     /* internodeAPI.h */
-    //    getNodeXml(history, HISTORYXML); /* internodeAPI.h */
+    getNodeXml(usage, USAGEXML);     /* internodeAPI.h */
+    getNodeXml(history, HISTORYXML); /* internodeAPI.h */
 
     free(usage);
     free(history);
 
-    double totalusage = getUsage(HISTORYXML, "//traffic", 0, -30);
+    double totalusage = getUsage(HISTORYXML, "traffic", 0, -30);
     printf("totalUsage = %f MB\n", totalusage);
     return 0;
 }

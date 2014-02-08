@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 23:40:19 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Fri Jan 24 09:16:23 2014 (+1030)
+ * Last-Updated: Sat Feb  8 15:27:33 2014 (+1030)
  *           By: mygnu
- *     Update #: 31
+ *     Update #: 49
  * URL:
  * Doc URL:
  * Keywords:
@@ -45,10 +45,45 @@
  */
 
 /* Code: */
+#include <sys/stat.h>
+#include <errno.h>
+#include <time.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include <curl/curl.h>
 #include "credentials.h"
 #include "internodeAPI.h"
 
+
+static int
+chkFileTime(char *file_name)
+{
+    time_t curtime;/* long int time format represents no
+                      of seconds since 00:00:00 Jan 1 1970*/
+    struct stat filestat;/* a system struct that is defined to store
+                            information about files. It is used in
+                            several system calls, including fstat, lstat,
+                            and stat. */
+    if(access(file_name, F_OK) == 0) /* file exists */
+    {
+        bzero(&filestat,sizeof(filestat));
+        if(stat(file_name,&filestat) != 0)/* stat is a system call to
+                                            determine information about
+                                            a file based on its file path.*/
+        {
+            printf("stat() failed with errno %d\n", errno);
+            exit(-1);
+        }
+        time(&curtime);/* current time in seconds */
+        /* difference between current time and file modification time */
+        double timetest = difftime(curtime, filestat.st_mtime);
+
+        if (timetest < 86400)   /* if less than a day old return false */
+            return 0;
+    }
+    return 1;
+}
 
 /* gets the page and writes the content to a file */
 void getNodeXml( char *url, char *file_name)
@@ -67,23 +102,24 @@ void getNodeXml( char *url, char *file_name)
         /* if a site is redirected, tell lib curl to follow redirection */
         // curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1L);
 
-/* set username and password options */
+        /* set username and password options */
         curl_easy_setopt(easyhandle, CURLOPT_USERNAME, uname);
         curl_easy_setopt(easyhandle, CURLOPT_PASSWORD, passwd);
 
-/* set to copy content to the file */
-        FILE *file = fopen(file_name, "w");
-        curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, file);
+        /* set to copy content to the file */
+        if(chkFileTime(file_name)) /* if file doesn't exist or more than
+				    a day old*/
+        {
+            FILE *file = fopen(file_name, "w");
+            curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, file);
 
-        curl_easy_perform(easyhandle); /* Perform the request */
-        fclose(file);           /* close the file */
-
-        curl_easy_cleanup(easyhandle); /* Libcurl cleanup */
-
+            curl_easy_perform(easyhandle); /* Perform the request */
+            fclose(file);           /* close the file */
+        }
     }
+    curl_easy_cleanup(easyhandle); /* Libcurl cleanup */
 
 }
-
 
 
 

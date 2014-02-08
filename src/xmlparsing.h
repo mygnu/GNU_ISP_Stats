@@ -7,9 +7,9 @@
  * Created: Wed Jan 22 10:16:40 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Fri Feb  7 21:51:31 2014 (+1030)
+ * Last-Updated: Sat Feb  8 15:38:44 2014 (+1030)
  *           By: mygnu
- *     Update #: 27
+ *     Update #: 28
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -50,8 +50,8 @@
 /* takes two pointers to string as name of the document and element
  returns char * content */
 
-char *
-getElementContent(char * docname, char * element);
+void
+getElementContent(char *docname, char *elementname , char *retStr);
 
 double
 getUsage(char *docname, char *elementName, int startDay, int endDay);

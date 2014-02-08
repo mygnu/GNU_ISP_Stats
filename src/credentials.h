@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 20:03:12 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Thu Jan 23 23:44:10 2014 (+1030)
+ * Last-Updated: Sat Feb  8 15:20:31 2014 (+1030)
  *           By: mygnu
- *     Update #: 11
+ *     Update #: 12
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -45,8 +45,7 @@
  */
 
 /* Code: */
-#include <stdio.h>
-#include <unistd.h>
+
 
 void getCredentials(char *uname, char *secret);
 
