@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 23:40:19 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Sat Feb  8 15:27:33 2014 (+1030)
+ * Last-Updated: Mon Feb 10 18:11:15 2014 (+1030)
  *           By: mygnu
- *     Update #: 49
+ *     Update #: 64
  * URL:
  * Doc URL:
  * Keywords:
@@ -54,7 +54,41 @@
 #include <curl/curl.h>
 #include "credentials.h"
 #include "internodeAPI.h"
+#include "xmlparsing.h"
 
+void
+internodeInit(char *startDate, char *stopDate)
+{
+    char baseurl[80] = "https://customer-webtools-api.internode.on.net\
+/api/v1.5/";
+    char baseopts[80] = "start=";
+/* get the first xml for the internode use rid */
+    getNodeXml(baseurl, BASEXML, NULL);
+
+    char serviceID[40];
+    getElementContent(BASEXML, "service", serviceID);
+    strcat(baseurl, serviceID);
+
+    char *history = (char*)malloc(sizeof(char) * 128);
+    strcpy(history, baseurl);
+    strcat(history,"/history/");
+
+    char *usage = (char*)malloc(sizeof(char) * 128);
+    strcpy(usage, baseurl);
+    strcat(usage,"/usage/");
+
+    strcat(baseopts,startDate);
+    strcat(baseopts,"&stop=");
+    strcat(baseopts,stopDate);
+    strcat(baseopts, "&verbose=1"); /*"start=2014-01-01&stop=2014-02-01&verbose=1"*/
+
+    getNodeXml(usage, USAGEXML, NULL); 
+    getNodeXml(history, HISTORYXML, baseopts); 
+
+    free(usage);
+    free(history);
+
+}
 
 static int
 chkFileTime(char *file_name)
@@ -69,8 +103,8 @@ chkFileTime(char *file_name)
     {
         bzero(&filestat,sizeof(filestat));
         if(stat(file_name,&filestat) != 0)/* stat is a system call to
-                                            determine information about
-                                            a file based on its file path.*/
+                                             determine information about
+                                             a file based on its file path.*/
         {
             printf("stat() failed with errno %d\n", errno);
             exit(-1);
@@ -86,7 +120,7 @@ chkFileTime(char *file_name)
 }
 
 /* gets the page and writes the content to a file */
-void getNodeXml( char *url, char *file_name)
+void getNodeXml( char *url, char *file_name, char *extra_opts)
 {
     char uname[50];
     char passwd[50];
@@ -105,10 +139,15 @@ void getNodeXml( char *url, char *file_name)
         /* set username and password options */
         curl_easy_setopt(easyhandle, CURLOPT_USERNAME, uname);
         curl_easy_setopt(easyhandle, CURLOPT_PASSWORD, passwd);
+        if (extra_opts != NULL)
+        {
+            curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, extra_opts);
+        }
+
 
         /* set to copy content to the file */
         if(chkFileTime(file_name)) /* if file doesn't exist or more than
-				    a day old*/
+                                      a day old*/
         {
             FILE *file = fopen(file_name, "w");
             curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, file);

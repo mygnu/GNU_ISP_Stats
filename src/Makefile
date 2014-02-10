@@ -7,7 +7,7 @@ AFILE   = assembly.asm
 CC      = gcc
 
 ## standard Flags
-CFLAGS  = -Wall -Wno-unused-variable -Wno-unused-result -g -std=gnu11 -O2 -pipe
+CFLAGS  = -Wall -Wno-unused-variable -Wno-unused-result -ggdb -std=gnu11 -O0 -pipe
 
 ## flags for Flymake
 FFLAGS	= -Wall -std=gnu11

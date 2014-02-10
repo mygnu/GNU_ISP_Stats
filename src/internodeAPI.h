@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 23:44:02 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Fri Jan 24 09:08:14 2014 (+1030)
+ * Last-Updated: Mon Feb 10 17:43:09 2014 (+1030)
  *           By: mygnu
- *     Update #: 16
+ *     Update #: 23
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -45,8 +45,16 @@
  */
 
 /* Code: */
+#define BASEXML "tmp/nodeservice.xml"
+#define USAGEXML "tmp/nodeusage.xml"
+#define HISTORYXML "tmp/nodehistory.xml"
 
-void getNodeXml( char *url, char *file_name);
+void
+internodeInit(char *startDate, char *stopDate);
+
+void
+getNodeXml( char *url, char *file_name, char *extra_opts);
+
 /* gets the page and writes the content to a file */
     
 

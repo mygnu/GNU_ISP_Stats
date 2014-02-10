@@ -7,9 +7,9 @@
  * Created: Tue Jan 21 22:44:20 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Sat Feb  8 16:06:45 2014 (+1030)
+ * Last-Updated: Mon Feb 10 13:23:55 2014 (+1030)
  *           By: mygnu
- *     Update #: 48
+ *     Update #: 70
  * URL:
  * Doc URL:
  * Keywords:
@@ -52,12 +52,12 @@
 #include <string.h>
 #define MBITS 1000000
 
+
 static xmlDocPtr
 getdoc (char *docname);
 
 static xmlXPathObjectPtr
 getnodeset (xmlDocPtr doc, xmlChar *xpath);
-
 
 /* takes two pointers to string as name of the document and element */
 void
@@ -66,8 +66,8 @@ getElementContent(char *docname, char *elementName , char * retStr)
     char  element[50] = "//";       /* needs // prefix for some reason */
     strcat(element, elementName);
 
-    xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
     xmlChar *xpath = (xmlChar*) element; /* is the name of the element */
+    xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
 
     xmlXPathObjectPtr result = getnodeset (doc, xpath);
     xmlNodeSetPtr nodeset;
@@ -79,18 +79,48 @@ getElementContent(char *docname, char *elementName , char * retStr)
         keyword = xmlNodeListGetString
             (doc, nodeset->nodeTab[0]->xmlChildrenNode, 1);
 
-        xmlXPathFreeObject (result);
-	strcpy(retStr, (char *)keyword);
+        strcpy(retStr, (char*)keyword);
         xmlFree(keyword);
     }
+    xmlXPathFreeObject (result);
     xmlFreeDoc(doc);
     xmlCleanupParser();
 }
 
-double getUsage(char *docname, char *elementName, int startDay, int endDay)
+void
+getAttrib(char *docname, char *elementName ,
+          char *attribName , char * retStr)
+{
+    char  element[50] = "//";       /* needs // prefix for some reason */
+    strcat(element, elementName);
+
+    xmlChar *xpath = (xmlChar*) element; /* is the name of the element */
+    xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
+
+    xmlXPathObjectPtr result = getnodeset (doc, xpath);
+    xmlNodeSetPtr nodeset;
+    //    xmlChar *attrib = (xmlChar*) attribName;
+
+    if (result)                 /* if not NULL */
+    {
+        nodeset = result->nodesetval;
+        xmlChar *prop = xmlGetProp(nodeset->nodeTab[0], (xmlChar *)attribName);
+        strcpy(retStr, (char*)prop);
+        xmlFree(prop);
+    }
+    xmlXPathFreeObject (result);
+    xmlFree(xpath);
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+}
+
+
+
+double
+getUsage(char *docname, char *elementName, int startDay, int endDay)
 {
 
-     char  element[50] = "//";       /* needs // prefix for some reason */
+    char  element[50] = "//";       /* needs // prefix for some reason */
     strcat(element, elementName);
 
     xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
@@ -179,3 +209,5 @@ getnodeset (xmlDocPtr doc, xmlChar *xpath)
 
 
 /* xmlparsing.c ends here */
+
+

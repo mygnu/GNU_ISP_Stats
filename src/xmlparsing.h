@@ -7,9 +7,9 @@
  * Created: Wed Jan 22 10:16:40 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Sat Feb  8 15:38:44 2014 (+1030)
+ * Last-Updated: Mon Feb 10 13:23:41 2014 (+1030)
  *           By: mygnu
- *     Update #: 28
+ *     Update #: 33
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -52,6 +52,10 @@
 
 void
 getElementContent(char *docname, char *elementname , char *retStr);
+
+void
+getAttrib(char *docname, char *elementName ,
+	  char *attribName , char * retStr);
 
 double
 getUsage(char *docname, char *elementName, int startDay, int endDay);
