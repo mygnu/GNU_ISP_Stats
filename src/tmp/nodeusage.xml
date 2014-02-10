@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<internode><api><service type="Personal_ADSL" request="usage">3854328</service><traffic name="total" rollover="2014-02-09" plan-interval="Monthly" quota="60000000000" unit="bytes">34254527783</traffic></api></internode>
