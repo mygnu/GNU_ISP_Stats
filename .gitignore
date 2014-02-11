@@ -17,6 +17,7 @@
 *.out
 *.app
 
+
 #temporary files
 src/tmp/*
 src/null
@@ -24,5 +25,6 @@ src/null
 #gtag files
 G????
 G?????
-
+*.xml
 *.pdf
+.git*

@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 23:44:02 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Mon Feb 10 17:43:09 2014 (+1030)
+ * Last-Updated: Tue Feb 11 14:23:57 2014 (+1030)
  *           By: mygnu
- *     Update #: 23
+ *     Update #: 24
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -50,7 +50,7 @@
 #define HISTORYXML "tmp/nodehistory.xml"
 
 void
-internodeInit(char *startDate, char *stopDate);
+internodeInit(char *startDate, char *stopDate, char *days_count);
 
 void
 getNodeXml( char *url, char *file_name, char *extra_opts);

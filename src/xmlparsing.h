@@ -7,9 +7,9 @@
  * Created: Wed Jan 22 10:16:40 2014 (+1030)
  * Version: 
  * Package-Requires: ()
- * Last-Updated: Mon Feb 10 13:23:41 2014 (+1030)
+ * Last-Updated: Tue Feb 11 15:11:48 2014 (+1030)
  *           By: mygnu
- *     Update #: 33
+ *     Update #: 36
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -49,16 +49,16 @@
 
 /* takes two pointers to string as name of the document and element
  returns char * content */
-
-void
-getElementContent(char *docname, char *elementname , char *retStr);
-
-void
-getAttrib(char *docname, char *elementName ,
-	  char *attribName , char * retStr);
+#define MBITS 1000000
+#define MTOGB 1000
+char *
+get_attrib_val(char *docname, char *elementName , char *attribName);
 
 double
-getUsage(char *docname, char *elementName, int startDay, int endDay);
+get_usage(char *docname, char *elementName, char *direction);
+
+char *
+get_element_content(char *docname, char *elementName);
 /* xmlparsing.h ends here */
 
 

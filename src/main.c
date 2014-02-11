@@ -12,16 +12,19 @@ int
 main(int argc, char *argv[])
 {
 
-    internodeInit("2014-01-01", "2014-02-01");
+    internodeInit("2014-02-09" , NULL, NULL);
     
  
-
-    double totalusage = getUsage(HISTORYXML, "traffic", 0, -30);
-    printf("totalUsage = %f MB\n", totalusage);
-
-    char *attrib = malloc(sizeof(char) * 50);
-    //    getAttrib(USAGEXML, "traffic", "quota", attrib);
-    printf("%s\n", attrib);
+    
+    double totalusage = get_usage(HISTORYXML, "traffic", "total");
+    printf("total usage %f MB\n",totalusage);
+    char *rollover = get_attrib_val(USAGEXML, "traffic", "rollover");
+    double quota = atof((char *) get_attrib_val(USAGEXML, "traffic", "quota"));
+    double current_usage = atof((char *) get_element_content(USAGEXML, "traffic"));
+    printf("total Quota: %0.2lf GB\n" ,quota/MBITS/MTOGB);
+    printf("Current usage: %0.2lf\n" ,current_usage/MBITS/MTOGB);
+    printf("Rollover Date: %s\n" ,rollover);
+    
     return 0;
 }
 

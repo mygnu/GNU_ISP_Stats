@@ -7,9 +7,9 @@
  * Created: Sun Jan 19 23:40:19 2014 (+1030)
  * Version:
  * Package-Requires: ()
- * Last-Updated: Mon Feb 10 18:11:15 2014 (+1030)
+ * Last-Updated: Tue Feb 11 14:55:42 2014 (+1030)
  *           By: mygnu
- *     Update #: 64
+ *     Update #: 71
  * URL:
  * Doc URL:
  * Keywords:
@@ -57,17 +57,34 @@
 #include "xmlparsing.h"
 
 void
-internodeInit(char *startDate, char *stopDate)
+internodeInit(char *start_date, char *stop_date, char *days_count)
 {
     char baseurl[80] = "https://customer-webtools-api.internode.on.net\
 /api/v1.5/";
-    char baseopts[80] = "start=";
-/* get the first xml for the internode use rid */
+    char usage_opts[128] = "verbose=1";
+    if (start_date != NULL)
+    {
+        strcat(usage_opts,"&start=");
+        strcat(usage_opts,start_date);
+    }
+    if (stop_date != NULL)
+    {
+	strcat(usage_opts,"&stop=");
+	strcat(usage_opts,stop_date);
+    }
+    if (days_count != NULL)
+    {
+	strcat(usage_opts,"&count=");
+	strcat(usage_opts,days_count);
+    }
+
+    /*"start=2014-01-01&stop=2014-02-01&verbose=1"*/
+
+/* get the xml files the internode */
     getNodeXml(baseurl, BASEXML, NULL);
 
-    char serviceID[40];
-    getElementContent(BASEXML, "service", serviceID);
-    strcat(baseurl, serviceID);
+    char *service_id = get_element_content(BASEXML, "service");
+    strcat(baseurl, service_id);
 
     char *history = (char*)malloc(sizeof(char) * 128);
     strcpy(history, baseurl);
@@ -77,14 +94,11 @@ internodeInit(char *startDate, char *stopDate)
     strcpy(usage, baseurl);
     strcat(usage,"/usage/");
 
-    strcat(baseopts,startDate);
-    strcat(baseopts,"&stop=");
-    strcat(baseopts,stopDate);
-    strcat(baseopts, "&verbose=1"); /*"start=2014-01-01&stop=2014-02-01&verbose=1"*/
 
-    getNodeXml(usage, USAGEXML, NULL); 
-    getNodeXml(history, HISTORYXML, baseopts); 
+    getNodeXml(usage, USAGEXML, "verbose=1");
+    getNodeXml(history, HISTORYXML, usage_opts);
 
+    free(service_id);
     free(usage);
     free(history);
 
