@@ -45,6 +45,8 @@
  */
 
 /* Code: */
+
+
 #include <sys/stat.h>
 #include <errno.h>
 #include <time.h>
@@ -55,6 +57,8 @@
 #include "credentials.h"
 #include "internodeAPI.h"
 #include "xmlparsing.h"
+
+#ifndef NOTAUSER
 
 void
 internodeInit(char *start_date, char *stop_date, char *days_count)
@@ -105,8 +109,10 @@ internodeInit(char *start_date, char *stop_date, char *days_count)
 }
 
 static int
-chkFileTime(char *file_name)
+chkFileDir(char *file_name)
 {
+    mkdir("tmp",0777);
+    
     time_t curtime;/* long int time format represents no
                       of seconds since 00:00:00 Jan 1 1970*/
     struct stat filestat;/* a system struct that is defined to store
@@ -160,7 +166,7 @@ void getNodeXml( char *url, char *file_name, char *extra_opts)
 
 
         /* set to copy content to the file */
-        if(chkFileTime(file_name)) /* if file doesn't exist or more than
+        if(chkFileDir(file_name)) /* if file doesn't exist or more than
                                       a day old*/
         {
             FILE *file = fopen(file_name, "w");
@@ -174,6 +180,8 @@ void getNodeXml( char *url, char *file_name, char *extra_opts)
 
 }
 
+#endif
 
 
 /* internodeAPI.c ends here */
+

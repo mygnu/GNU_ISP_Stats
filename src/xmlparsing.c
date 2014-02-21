@@ -187,7 +187,6 @@ get_usage(char *docname, char *elementName, char *type)
     }
 
 
-
     char  element[50] = "//";       /* needs // prefix for some reason */
     strcat(element, elementName);
 

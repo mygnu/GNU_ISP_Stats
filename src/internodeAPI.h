@@ -49,6 +49,7 @@
 #define USAGEXML "tmp/nodeusage.xml"
 #define HISTORYXML "tmp/nodehistory.xml"
 
+
 void
 internodeInit(char *startDate, char *stopDate, char *days_count);
 

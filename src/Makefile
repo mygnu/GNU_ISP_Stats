@@ -7,7 +7,8 @@ AFILE   = assembly.asm
 CC      = gcc
 
 ## standard Flags
-CFLAGS  = -Wall -Wno-unused-variable -Wno-unused-result -ggdb -std=gnu11 -O0 -pipe
+CFLAGS  = -Wall -ggdb -std=gnu11 -O0 -pipe
+#-Wno-unused-variable -Wno-unused-result
 
 ## flags for Flymake
 FFLAGS	= -Wall -std=gnu11
@@ -29,7 +30,7 @@ $(EXEC): $(OBJS)
 
 $(DBFILE): $(OBJS)
 	$(CC) $(OBJS) $(DFLAGS) -o $(DBFILE) $(LINKF)
-main.o: main.c
+main.o: main.c internodeAPI.h credentials.h
 	$(CC) $(CFLAGS) -c main.c
 
 credentials.o: credentials.c credentials.h

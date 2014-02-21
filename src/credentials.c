@@ -55,7 +55,7 @@ void getCredentials( char *uname, char *secret)
  or calls fromKeboard and writes to the file*/
 {
     FILE *crFile;
-    char filename[] = "tmp/unamepwd";
+    char *filename = "tmp/unamepwd";
     if (access(filename, F_OK) != -1)
     {   /* file exists */
         if((crFile = fopen(filename,"r")) != NULL)
@@ -65,7 +65,8 @@ void getCredentials( char *uname, char *secret)
             fclose(crFile);         /* close file */
 	}
         else                    /* if not able to open the file print error */
-            fprintf(stderr, "Not able to open the credential file %s\n", filename);
+            fprintf(stderr, "Not able to open the credential file %s\n",
+		    filename);
     }
 
     else
@@ -79,7 +80,8 @@ void getCredentials( char *uname, char *secret)
             fclose(crFile);         /* close file */
         }
 	else                    /* if not able to open the file print error */
-            fprintf(stderr, "Not able to open the credential file %s\n", filename);
+            fprintf(stderr, "Not able to open the credential file %s\n",
+		    filename);
     }
 }
 
@@ -94,3 +96,10 @@ void fromKeboard(char *uname, char *secret)
 }
 
 /* credentials.c ends here */
+
+
+
+
+
+
+
