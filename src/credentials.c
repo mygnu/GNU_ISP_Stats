@@ -65,8 +65,7 @@ void getCredentials( char *uname, char *secret)
             fclose(crFile);         /* close file */
 	}
         else                    /* if not able to open the file print error */
-            fprintf(stderr, "Not able to open the credential file %s\n",
-		    filename);
+            fprintf(stderr, "Not able to open the credential file %s\n", filename);
     }
 
     else
