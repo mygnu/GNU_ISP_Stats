@@ -5,26 +5,9 @@
  * Author: mygnu
  * Maintainer:
  * Created: Sun Jan 19 23:40:19 2014 (+1030)
- * Version:
- * Package-Requires: ()
- * Last-Updated: Tue Feb 11 14:55:42 2014 (+1030)
+ * Last-Updated: Sun Mar  9 22:03:40 2014 (+1030)
  *           By: mygnu
- *     Update #: 71
- * URL:
- * Doc URL:
- * Keywords:
- * Compatibility:
- *
- */
-
-/* Commentary:
- *
- *
- *
- */
-
-/* Change Log:
- *
+ *     Update #: 76
  *
  */
 
@@ -32,16 +15,6 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 3, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth
- * Floor, Boston, MA 02110-1301, USA.
  */
 
 /* Code: */
@@ -85,9 +58,10 @@ internodeInit(char *start_date, char *stop_date, char *days_count)
     /*"start=2014-01-01&stop=2014-02-01&verbose=1"*/
 
 /* get the xml files the internode */
-    getNodeXml(baseurl, BASEXML, NULL);
+    confPaths *xmlfiles = pathFunc(); 
+    getNodeXml(baseurl, xmlfiles->basexml, NULL);
 
-    char *service_id = get_element_content(BASEXML, "service");
+    char *service_id = get_element_content(xmlfiles->basexml, "service");
     strcat(baseurl, service_id);
 
     char *history = (char*)malloc(sizeof(char) * 128);
@@ -99,12 +73,13 @@ internodeInit(char *start_date, char *stop_date, char *days_count)
     strcat(usage,"/usage/");
 
 
-    getNodeXml(usage, USAGEXML, "verbose=1");
-    getNodeXml(history, HISTORYXML, usage_opts);
+    getNodeXml(usage, xmlfiles->usagexml, "verbose=1");
+    getNodeXml(history, xmlfiles->historyxml, usage_opts);
 
     free(service_id);
     free(usage);
     free(history);
+    free(xmlfiles);
 
 }
 
@@ -145,7 +120,8 @@ void getNodeXml( char *url, char *file_name, char *extra_opts)
     char uname[50];
     char passwd[50];
     /* get user name and password */
-    getCredentials(uname, passwd);
+    if (!getCredentials(uname, passwd))
+	exit(0);
 
     CURL *easyhandle = curl_easy_init(); /* initialize curl */
 
@@ -166,7 +142,7 @@ void getNodeXml( char *url, char *file_name, char *extra_opts)
 
 
         /* set to copy content to the file */
-        if(chkFileDir(file_name)) /* if file doesn't exist or more than
+        /* if(chkFileDir(file_name)) */ /* if file doesn't exist or more than
                                       a day old*/
         {
             FILE *file = fopen(file_name, "w");

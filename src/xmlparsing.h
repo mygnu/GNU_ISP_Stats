@@ -50,7 +50,7 @@
 /* takes two pointers to string as name of the document and element
  returns char * content */
 #define MBITS 1000000
-#define MTOGB 1000
+#define MBTOGB 1000
 char *
 get_attrib_val(char *docname, char *elementName , char *attribName);
 

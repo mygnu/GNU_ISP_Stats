@@ -2,46 +2,16 @@
  *
  * Filename: xmlparsing.c
  * Description:
- * Author: mygnu
- * Maintainer:
  * Created: Tue Jan 21 22:44:20 2014 (+1030)
- * Version:
- * Package-Requires: ()
- * Last-Updated: Tue Feb 11 15:11:39 2014 (+1030)
+ * Last-Updated: Fri Mar  7 23:46:12 2014 (+1030)
  *           By: mygnu
- *     Update #: 74
- * URL:
- * Doc URL:
- * Keywords:
- * Compatibility:
- *
- */
-
-/* Commentary:
- *
- *
- *
- */
-
-/* Change Log:
- *
- *
+ *     Update #: 76
  */
 
 /* This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 3, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth
- * Floor, Boston, MA 02110-1301, USA.
  */
 
 /* Code: */
@@ -148,7 +118,7 @@ get_attrib_val(char *docname, char *elementName , char *attribName)
     xmlDocPtr doc = getdoc(docname); /* xmlDocPtr to the document */
     xmlXPathObjectPtr result = getnodeset (doc, xpath);
     xmlNodeSetPtr nodeset;
-
+    
     if (result)                 /* if not NULL */
     {
         nodeset = result->nodesetval;
